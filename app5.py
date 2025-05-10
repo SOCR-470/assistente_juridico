@@ -22,23 +22,34 @@ EMAIL_DEST = os.getenv("EMAIL_DEST") or SMTP_USER
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_CONTRATUAL")
 
+
+
+# Configuração dinâmica por escritório
+ESCRITORIO = {
+    "nome_display": "Pinheiro Machado & Pinto",
+    "logo_url": "https://raw.githubusercontent.com/SOCR-470/assistente_juridico/main/logo_pmp.png",
+    "titulo_sub": "Canal de Atendimento Jurídico - Pinheiro Machado & Pinto"
+}
+
 SAUDACAO = (
-    "Olá, seja bem-vindo ao PMP Advogados Associacos. Sou a Luana e irei cuidar de seu atendimento.\n\n"
+    f"Olá, seja bem-vindo ao {ESCRITORIO['nome_display']}. Meu nome é Laryssa e irei cuidar de seu atendimento.\n\n"
     "Poderia, primeiramente, me informar seu *nome completo* e *telefone com DDD*, por gentileza?"
 )
 
-# Histórico do chat
 if "historico_chat" not in st.session_state:
     st.session_state.historico_chat = [
-        {"role": "system", "content": """Você é uma assistente virtual jurídico de atendimento ao público chamado Cris. 
+        {
+            "role": "system",
+            "content": f"""
+Você é uma assistente virtual jurídico de atendimento ao público chamada Cris, do escritório {ESCRITORIO['nome_display']}.
 Siga estas instruções com precisão:
 
 1. Inicie sempre com:
-"Olá, seja bem-vindo ao escritório X! Sou a Laryssa e irei cuidar de seu atendimento. Poderia, primeiramente, me dizer seu nome completo e telefone de contato com DDD, por gentileza?"
+"{SAUDACAO}"
 
 2. Se o nome completo ou telefone com DDD não forem fornecidos inicialmente, prossiga com educação, mas **reitere educadamente o pedido** de nome e telefone na próxima oportunidade.
 
-3. Depois de obter o nome e telefone, se o cliente ainda não disse o motivo do contato, repita o nome do cliente e pergunte:
+3. Depois de obter o nome e telefone, repita o nome do cliente e pergunte:
    - "Como posso lhe ajudar?"
 
 4. Se o objetivo for agendamento de reunião e o assunto principal da reunião não foi informado, repita o nome do cliente e pergunte:
@@ -51,12 +62,15 @@ Siga estas instruções com precisão:
    - "Você já está sendo atendido por algum dos nossos advogados ou será seu primeiro contato com o escritório?"
 
 7. Quando reunir todas as informações necessárias, responda:
-"ATENDIMENTO CONFIRMADO, Cliente: ... | Horário preferencial: ... | Detalhes: ..."
+"[ATENDIMENTO CONFIRMADO] Cliente: ... | Horário preferencial: ... | Detalhes: ..."
 
 8. Seja cordial, mantenha linguagem profissional e não ofereça diagnósticos jurídicos.
 
-9. Se faltar dados ou houver ambiguidade, solicite com clareza."""}
+9. Se faltar dados ou houver ambiguidade, solicite com clareza.
+"""
+        }
     ]
+
 
 def enviar_telegram_agendamento_juridico(nome_cliente, detalhes_atendimento, horario_preferencial, telefone):
     mensagem = (
@@ -173,13 +187,6 @@ def registrar_agendamento(nome, detalhes, horario, sucesso):
             f.write(json.dumps(registro, ensure_ascii=False) + "\n")
     except Exception as e:
         st.error(f"Erro ao salvar agendamento: {str(e)}")
-
-# Configuração dinâmica por escritório
-ESCRITORIO = {
-    "nome_display": "PMP",
-    "logo_url": "https://raw.githubusercontent.com/SOCR-470/assistente_juridico/main/logo_pmp.png",
-    "titulo_sub": "Canal de Atendimento - Pinheiro Machado & Pinto"
-}
 
 # Interface visual com logo e subtítulo institucional
 st.set_page_config(
