@@ -177,11 +177,13 @@ def registrar_agendamento(nome, detalhes, horario, sucesso):
 # Interface
 st.set_page_config(
     page_title="JusIA - Atendimento Jurídico",
-    page_icon="https://raw.githubusercontent.com/SOCR-470/assistente_juridico/main/logo_pmp.png"
+    page_icon="🤖"
 )
 
 st.markdown(
-    "<div style='text-align: center'><img src='https://raw.githubusercontent.com/SOCR-470/assistente_juridico/main/logo_pmp.png' width='280'/></div>",
+    "<div style='text-align: center'>"
+    "<img src='https://raw.githubusercontent.com/SOCR-470/assistente_juridico/main/logo_pmp.png' width='280'/>"
+    "</div>",
     unsafe_allow_html=True
 )
 
