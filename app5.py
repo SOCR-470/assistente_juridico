@@ -176,7 +176,7 @@ def registrar_agendamento(nome, detalhes, horario, sucesso):
 
 # Interface
 st.set_page_config(
-    page_title="JusIA - Atendimento Jurídico",
+    page_title="Atendimento Jurídico",
     page_icon="🤖"
 )
 
@@ -187,7 +187,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.title("JusIA - Assistente Jurídico Virtual")
+st.title("Assistente Jurídico")
 
 
 for msg in st.session_state.historico_chat[1:]:
