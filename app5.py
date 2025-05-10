@@ -177,13 +177,15 @@ def registrar_agendamento(nome, detalhes, horario, sucesso):
 # Interface
 st.set_page_config(
     page_title="JusIA - Atendimento Jurídico",
-    page_icon="https://www.pinheiromachadoepinto.com.br/assets/logo.png"  # Altere aqui conforme a URL real
+    page_icon="https://raw.githubusercontent.com/SOCR-470/assistente_juridico/main/logo_pmp.png"
 )
 
 st.markdown(
-    "<div style='text-align: center'><img src='https://www.pinheiromachadoepinto.com.br/assets/logo.png' width='300'/></div>",
+    "<div style='text-align: center'><img src='https://raw.githubusercontent.com/SOCR-470/assistente_juridico/main/logo_pmp.png' width='280'/></div>",
     unsafe_allow_html=True
 )
+
+st.title("JusIA - Assistente Jurídico Virtual")
 
 
 for msg in st.session_state.historico_chat[1:]:
