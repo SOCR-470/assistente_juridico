@@ -178,7 +178,7 @@ def registrar_agendamento(nome, detalhes, horario, sucesso):
 ESCRITORIO = {
     "nome_display": "PMP",
     "logo_url": "https://raw.githubusercontent.com/SOCR-470/assistente_juridico/main/logo_pmp.png",
-    "titulo_sub": "Canal de Atendimento Jurídico - Pinheiro Machado & Pinto"
+    "titulo_sub": "Canal de Atendimento - Pinheiro Machado & Pinto"
 }
 
 # Interface visual com logo e subtítulo institucional
