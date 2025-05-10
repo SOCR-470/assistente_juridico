@@ -22,40 +22,60 @@ EMAIL_DEST = os.getenv("EMAIL_DEST") or SMTP_USER
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_CONTRATUAL")
 
+# Configuração dinâmica por escritório
+ESCRITORIO = {
+    "nome_display": "Pinheiro Machado & Pinto",
+    "logo_url": "https://raw.githubusercontent.com/SOCR-470/assistente_juridico/main/logo_pmp.png",
+    "titulo_sub": "Canal de Atendimento - Pinheiro Machado & Pinto"
+}
+
 SAUDACAO = (
-    "Olá, seja bem-vindo ao escritório X. Sou a Laryssa e irei cuidar de seu atendimento.\n\n"
+    f"Olá, seja bem-vindo ao {ESCRITORIO['nome_display']}. Meu nome é Luana e irei cuidar de seu atendimento. "
     "Poderia, primeiramente, me informar seu *nome completo* e *telefone com DDD*, por gentileza?"
 )
 
-# Histórico do chat
+# Detecta assunto já nas primeiras mensagens
+def detectar_assunto_rapido():
+    termos = ["criminal", "contrato", "cível", "trabalhista", "herança", "empresa", "advogado", "divórcio"]
+    for msg in st.session_state.get("historico_chat", []):
+        if msg["role"] == "user":
+            for termo in termos:
+                if termo in msg["content"].lower():
+                    return True
+    return False
+
 if "historico_chat" not in st.session_state:
     st.session_state.historico_chat = [
-        {"role": "system", "content": """Você é uma assistente virtual jurídico de atendimento ao público chamado Cris. 
+        {
+            "role": "system",
+            "content": f"""
+Você é uma assistente virtual jurídico de atendimento ao público chamada Cris, do escritório {ESCRITORIO['nome_display']}.
 Siga estas instruções com precisão:
 
 1. Inicie sempre com:
-"Olá, seja bem-vindo ao escritório X! Sou a Laryssa e irei cuidar de seu atendimento. Poderia, primeiramente, me dizer seu nome completo e telefone de contato com DDD, por gentileza?"
+"{SAUDACAO}"
 
 2. Se o nome completo ou telefone com DDD não forem fornecidos inicialmente, prossiga com educação, mas **reitere educadamente o pedido** de nome e telefone na próxima oportunidade.
 
-3. Depois de obter o nome e telefone, se o cliente ainda não disse o motivo do contato, repita o nome do cliente e pergunte:
-   - "Como posso lhe ajudar?"
+3. Depois de obter o nome e telefone, repita o nome do cliente.
 
-4. Se o objetivo for agendamento de reunião e o assunto principal da reunião não foi informado, repita o nome do cliente e pergunte:
-   - "Qual seria o assunto principal da reunião para que eu possa direcionar da melhor forma?"
-
-5. Em seguida, pergunte:
+4. Se o objetivo da reunião já estiver claro nas primeiras mensagens, **não repita a pergunta 'Como posso lhe ajudar?'**. Vá diretamente para:
    - "Qual dia e horário seriam mais convenientes para essa reunião?"
+
+5. Se o objetivo ainda não estiver claro, pergunte:
+   - "Qual seria o assunto principal da reunião para que eu possa direcionar da melhor forma?"
 
 6. Depois, pergunte:
    - "Você já está sendo atendido por algum dos nossos advogados ou será seu primeiro contato com o escritório?"
 
 7. Quando reunir todas as informações necessárias, responda:
-"ATENDIMENTO CONFIRMADO, Cliente: ... | Horário preferencial: ... | Detalhes: ..."
+"[ATENDIMENTO CONFIRMADO] Cliente: ... | Horário preferencial: ... | Detalhes: ..."
 
 8. Seja cordial, mantenha linguagem profissional e não ofereça diagnósticos jurídicos.
 
-9. Se faltar dados ou houver ambiguidade, solicite com clareza."""}
+9. Se faltar dados ou houver ambiguidade, solicite com clareza.
+"""
+        }
     ]
 
 def enviar_telegram_agendamento_juridico(nome_cliente, detalhes_atendimento, horario_preferencial, telefone):
@@ -174,13 +194,6 @@ def registrar_agendamento(nome, detalhes, horario, sucesso):
     except Exception as e:
         st.error(f"Erro ao salvar agendamento: {str(e)}")
 
-# Configuração dinâmica por escritório
-ESCRITORIO = {
-    "nome_display": "Moris Advogados",
-    "logo_url": "https://raw.githubusercontent.com/SOCR-470/assistente_juridico/main/logo_pmp.png",
-    "titulo_sub": "Canal de Atendimento Jurídico - Pinheiro Machado & Pinto"
-}
-
 # Interface visual com logo e subtítulo institucional
 st.set_page_config(
     page_title=f"{ESCRITORIO['nome_display']}",
@@ -197,18 +210,30 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# Renderização do histórico com emojis mais atrativos
 for msg in st.session_state.historico_chat[1:]:
     if msg["role"] == "user":
-        with st.chat_message("user"):
+        with st.chat_message("user", avatar="🧑‍💼"):
             st.write(msg["content"])
     elif msg["role"] == "assistant":
-        with st.chat_message("assistant"):
+        with st.chat_message("assistant", avatar="🤖"):
             st.write(msg["content"])
 
+# Entrada e resposta com spinner ajustado
 if prompt := st.chat_input("Como posso ajudá-lo juridicamente hoje?"):
     st.session_state.historico_chat.append({"role": "user", "content": prompt})
-    with st.spinner("Aguarde, analisando..."):
-        resposta = processar_resposta_gpt()
+    with st.chat_message("user", avatar="🧑‍💼"):
+        st.write(prompt)
+
+    with st.spinner("Digitando..."):
+        resposta = openai.chat.completions.create(
+            model="gpt-4-turbo",
+            messages=st.session_state.historico_chat,
+            temperature=0.7
+        ).choices[0].message.content
+
         st.session_state.historico_chat.append({"role": "assistant", "content": resposta})
-        finalizar_agendamento(resposta)
+        with st.chat_message("assistant", avatar="🤖"):
+            st.write(resposta)
+
     st.rerun()
