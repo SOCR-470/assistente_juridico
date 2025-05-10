@@ -23,7 +23,7 @@ TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_CONTRATUAL")
 
 SAUDACAO = (
-    "Olá, seja bem-vindo ao escritório X. Meu nome é Laryssa e irei cuidar de seu atendimento.\n\n"
+    "Olá, seja bem-vindo ao escritório X. Sou a Laryssa e irei cuidar de seu atendimento.\n\n"
     "Poderia, primeiramente, me informar seu *nome completo* e *telefone com DDD*, por gentileza?"
 )
 
@@ -34,11 +34,11 @@ if "historico_chat" not in st.session_state:
 Siga estas instruções com precisão:
 
 1. Inicie sempre com:
-"Olá, seja bem-vindo ao escritório X! Meu nome é Laryssa e irei cuidar de seu atendimento. Poderia, primeiramente, me dizer seu nome completo e telefone de contato com DDD, por gentileza?"
+"Olá, seja bem-vindo ao escritório X! Sou a Laryssa e irei cuidar de seu atendimento. Poderia, primeiramente, me dizer seu nome completo e telefone de contato com DDD, por gentileza?"
 
 2. Se o nome completo ou telefone com DDD não forem fornecidos inicialmente, prossiga com educação, mas **reitere educadamente o pedido** de nome e telefone na próxima oportunidade.
 
-3. Depois de obter o nome e telefone, repita o nome do cliente e pergunte:
+3. Depois de obter o nome e telefone, se o cliente ainda não disse o motivo do contato, repita o nome do cliente e pergunte:
    - "Como posso lhe ajudar?"
 
 4. Se o objetivo for agendamento de reunião e o assunto principal da reunião não foi informado, repita o nome do cliente e pergunte:
@@ -51,7 +51,7 @@ Siga estas instruções com precisão:
    - "Você já está sendo atendido por algum dos nossos advogados ou será seu primeiro contato com o escritório?"
 
 7. Quando reunir todas as informações necessárias, responda:
-"[ATENDIMENTO CONFIRMADO] Cliente: ... | Horário preferencial: ... | Detalhes: ..."
+"ATENDIMENTO CONFIRMADO, Cliente: ... | Horário preferencial: ... | Detalhes: ..."
 
 8. Seja cordial, mantenha linguagem profissional e não ofereça diagnósticos jurídicos.
 
@@ -175,8 +175,8 @@ def registrar_agendamento(nome, detalhes, horario, sucesso):
         st.error(f"Erro ao salvar agendamento: {str(e)}")
 
 # Interface
-st.set_page_config(page_title="JusIA - Atendimento Jurídico", page_icon="⚖️")
-st.title("⚖️ JusIA - Assistente Jurídico Virtual")
+st.set_page_config(page_title="Atendimento Jurídico", page_icon="⚖️")
+st.title("🧿 Dani - Assistente Jurídico Virtual")
 
 for msg in st.session_state.historico_chat[1:]:
     if msg["role"] == "user":
