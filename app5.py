@@ -185,7 +185,7 @@ st.markdown(
     """
     <div style='text-align: center'>
         <img src='https://raw.githubusercontent.com/SOCR-470/assistente_juridico/main/logo_pmp.png' width='260'/>
-        <h4 style='margin-top: 0.5em; color: gray;'>Canal de Atendimento Jurídico - Pinheiro Machado & Pinto</h4>
+        <h4 style='margin-top: 0.5em; color: gray;'>Canal de Atendimento Jurídico</h4>
     </div>
     """,
     unsafe_allow_html=True
