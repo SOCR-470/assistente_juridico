@@ -197,18 +197,30 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# Renderização do histórico com emojis mais atrativos
 for msg in st.session_state.historico_chat[1:]:
     if msg["role"] == "user":
-        with st.chat_message("user"):
+        with st.chat_message("user", avatar="🧑‍💼"):
             st.write(msg["content"])
     elif msg["role"] == "assistant":
-        with st.chat_message("assistant"):
+        with st.chat_message("assistant", avatar="🤖"):
             st.write(msg["content"])
 
+# Entrada e resposta com spinner ajustado
 if prompt := st.chat_input("Como posso ajudá-lo juridicamente hoje?"):
     st.session_state.historico_chat.append({"role": "user", "content": prompt})
-    with st.spinner("Aguarde, analisando..."):
-        resposta = processar_resposta_gpt()
+    with st.chat_message("user", avatar="🧑‍💼"):
+        st.write(prompt)
+
+    with st.spinner("Digitando..."):
+        resposta = openai.chat.completions.create(
+            model="gpt-4-turbo",
+            messages=st.session_state.historico_chat,
+            temperature=0.7
+        ).choices[0].message.content
+
         st.session_state.historico_chat.append({"role": "assistant", "content": resposta})
-        finalizar_agendamento(resposta)
+        with st.chat_message("assistant", avatar="🤖"):
+            st.write(resposta)
+
     st.rerun()
