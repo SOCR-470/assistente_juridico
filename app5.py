@@ -175,8 +175,21 @@ def registrar_agendamento(nome, detalhes, horario, sucesso):
         st.error(f"Erro ao salvar agendamento: {str(e)}")
 
 # Interface
-st.set_page_config(page_title="Atendimento Jurídico", page_icon="⚖️")
-st.title("🧿 Dani - Assistente Jurídico Virtual")
+st.set_page_config(page_title="JusIA - Atendimento Jurídico", page_icon="logo_pmp.png")  # se for local
+
+# Para exibir a logo no topo
+st.image("logo_pmp.png", width=300)  # se local
+
+# Ou se quiser usar o link direto:
+# st.image("https://www.pmp.com.br/logo.png", width=300)
+
+st.title("JusIA - Assistente Jurídico Virtual")
+
+st.markdown(
+    "<div style='text-align: center'><img src='logo_pmp.png' width='300'/></div>",
+    unsafe_allow_html=True
+)
+
 
 for msg in st.session_state.historico_chat[1:]:
     if msg["role"] == "user":
