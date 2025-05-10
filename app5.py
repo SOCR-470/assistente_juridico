@@ -174,20 +174,22 @@ def registrar_agendamento(nome, detalhes, horario, sucesso):
     except Exception as e:
         st.error(f"Erro ao salvar agendamento: {str(e)}")
 
-# Interface
+
+# Interface visual com logo e subtítulo institucional
 st.set_page_config(
-    page_title="Atendimento Jurídico",
-    page_icon="🤖"
+    page_title="Pinheiro Machado & Pinto",
+    page_icon="https://raw.githubusercontent.com/SOCR-470/assistente_juridico/main/logo_pmp.png"
 )
 
 st.markdown(
-    "<div style='text-align: center'>"
-    "<img src='https://raw.githubusercontent.com/SOCR-470/assistente_juridico/main/logo_pmp.png' width='280'/>"
-    "</div>",
+    """
+    <div style='text-align: center'>
+        <img src='https://raw.githubusercontent.com/SOCR-470/assistente_juridico/main/logo_pmp.png' width='260'/>
+        <h4 style='margin-top: 0.5em; color: gray;'>Canal de Atendimento Jurídico - Pinheiro Machado & Pinto</h4>
+    </div>
+    """,
     unsafe_allow_html=True
 )
-
-st.title("Assistente Jurídico")
 
 
 for msg in st.session_state.historico_chat[1:]:
