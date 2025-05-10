@@ -28,13 +28,14 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_CONTRATUAL")
 ESCRITORIO = {
     "nome_display": "Pinheiro Machado & Pinto",
     "logo_url": "https://raw.githubusercontent.com/SOCR-470/assistente_juridico/main/logo_pmp.png",
-    "titulo_sub": "Canal de Atendimento Jurídico - Pinheiro Machado & Pinto"
+    "titulo_sub": "Canal de Atendimento - Pinheiro Machado & Pinto"
 }
 
 SAUDACAO = (
-    f"Olá, seja bem-vindo ao {ESCRITORIO['nome_display']}. Meu nome é Laryssa e irei cuidar de seu atendimento.\n\n"
+    f"Olá, seja bem-vindo ao {ESCRITORIO['nome_display']}. Meu nome é Luana e irei cuidar de seu atendimento. "
     "Poderia, primeiramente, me informar seu *nome completo* e *telefone com DDD*, por gentileza?"
 )
+
 
 if "historico_chat" not in st.session_state:
     st.session_state.historico_chat = [
