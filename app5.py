@@ -175,7 +175,7 @@ def registrar_agendamento(nome, detalhes, horario, sucesso):
         st.error(f"Erro ao salvar agendamento: {str(e)}")
 
 # Interface
-st.set_page_config(page_title="JusIA - Atendimento Jurídico", page_icon="logo_pmp.png")
+st.set_page_config(page_title="JusIA - Atendimento Jurídico", page_icon="https://pinheiromachadoepinto.com.br/logo_pmp.png", width=300)
 
 st.markdown(
     "<div style='text-align: center'><img src='logo_pmp.png' width='300'/></div>",
@@ -183,7 +183,6 @@ st.markdown(
 )
 
 st.title("JusIA - Assistente Jurídico Virtual")
-
 
 
 for msg in st.session_state.historico_chat[1:]:
