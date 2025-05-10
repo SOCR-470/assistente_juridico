@@ -23,7 +23,7 @@ TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_CONTRATUAL")
 
 SAUDACAO = (
-    "Olá, seja bem-vindo ao escritório X. Sou a Laryssa e irei cuidar de seu atendimento.\n\n"
+    "Olá, seja bem-vindo ao PMP Advogados Associacos. Sou a Luana e irei cuidar de seu atendimento.\n\n"
     "Poderia, primeiramente, me informar seu *nome completo* e *telefone com DDD*, por gentileza?"
 )
 
