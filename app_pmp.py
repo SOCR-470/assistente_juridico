@@ -23,7 +23,7 @@ LINK_GOOGLE_CALENDAR = os.getenv("LINK_CALENDAR") or "https://calendar.google.co
 ESCRITORIO = {
     "nome_display": "Pinheiro Machado & Pinto",
     "logo_url": "https://raw.githubusercontent.com/SOCR-470/assistente_juridico/main/logo_pmp.png",
-    "titulo_sub": "Canal de Atendimento - Pinheiro Machado & Pinto"
+    "titulo_sub": "Pinheiro Machado & Pinto"
 }
 
 SAUDACAO = (
@@ -36,7 +36,7 @@ if "historico_chat" not in st.session_state:
         {
             "role": "system",
             "content": f"""
-Você é uma assistente virtual jurídico chamada Cris, do escritório {ESCRITORIO['nome_display']}.
+Você é uma assistente virtual jurídico chamada Luana, do escritório {ESCRITORIO['nome_display']}.
 Siga estas instruções:
 
 1. Inicie com:
@@ -107,7 +107,7 @@ entrada_usuario = st.chat_input("Digite aqui sua mensagem...")
 if entrada_usuario:
     st.session_state.historico_chat.append({"role": "user", "content": entrada_usuario})
     with st.chat_message("assistant", avatar="🤖"):
-        with st.spinner("Cris está digitando..."):
+        with st.spinner("Luana está digitando..."):
             resposta = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=st.session_state.historico_chat
