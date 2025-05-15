@@ -46,41 +46,76 @@ Siga estas instruções:
 
 3. Após obter nome e telefone, repita o nome.
 
-4. Pergunte se é cliente novo ou recorrente.
+4. Se o objetivo da reunião estiver claro, pergunte o horário. Caso contrário, pergunte o assunto.
 
-5. Pergunte se o usuário deseja agendar uma reunião ou atendimento. Caso afirmativo, pergunte o objetivo da reunião.
+5. Pergunte se é cliente novo ou recorrente.
 
-6. Se o objetivo da reunião estiver claro, pergunte o horário. Caso contrário, peça um resumo do caso.
-
-7. Ao final, envie o link do google calendar para o usuário agendar uma reunião, caso queira: {LINK_GOOGLE_CALENDAR}
+6. Ao final, envie o link do google calendar para o usuário agendar a reunião: {LINK_GOOGLE_CALENDAR}
 
 7. Seja cordial, profissional e evite diagnósticos jurídicos.
 """
         }
     ]
 
-st.set_page_config(page_title="Atendimento Jurídico", page_icon="⚖️")
-st.image(ESCRITORIO['logo_url'], width=180)
-st.title(ESCRITORIO['titulo_sub'])
+# Interface Streamlit
+st.set_page_config(
+    page_title=f"{ESCRITORIO['nome_display']}",
+    page_icon=ESCRITORIO['logo_url']
+)
 
+st.markdown(
+    f"""
+    <div style='text-align: center'>
+        <img src='{ESCRITORIO['logo_url']}' width='260'/>
+        <h4 style='margin-top: 0.5em; color: gray;'>{ESCRITORIO['titulo_sub']}</h4>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+def enviar_conversa_telegram(historico):
+    mensagem = "📋 *Resumo do atendimento realizado:*\n\n"
+    for msg in historico:
+        if msg["role"] == "user":
+            mensagem += f"👤 *Cliente:* {msg['content']}\n"
+        elif msg["role"] == "assistant":
+            mensagem += f"🤖 *Assistente:* {msg['content']}\n"
+
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+    payload = {
+        "chat_id": TELEGRAM_CHAT_ID,
+        "text": mensagem,
+        "parse_mode": "Markdown"
+    }
+    response = requests.post(url, data=payload)
+    print("📲 Enviado ao Telegram:", response.status_code)
+
+# Exibe o histórico completo antes da entrada do usuário
+for msg in st.session_state.historico_chat[1:]:
+    if msg["role"] == "user":
+        with st.chat_message("user", avatar="🧑‍💼"):
+            st.write(msg["content"])
+    elif msg["role"] == "assistant":
+        with st.chat_message("assistant", avatar="🤖"):
+            st.write(msg["content"])
+
+# Campo de entrada SEMPRE após o histórico
 entrada_usuario = st.chat_input("Digite aqui sua mensagem...")
 
 if entrada_usuario:
     st.session_state.historico_chat.append({"role": "user", "content": entrada_usuario})
-    resposta = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=st.session_state.historico_chat
-    )
-    conteudo = resposta.choices[0].message.content
-    st.session_state.historico_chat.append({"role": "assistant", "content": conteudo})
+    with st.chat_message("assistant", avatar="🤖"):
+        with st.spinner("Cris está digitando..."):
+            resposta = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=st.session_state.historico_chat
+            )
+            conteudo = resposta.choices[0].message.content
+            st.session_state.historico_chat.append({"role": "assistant", "content": conteudo})
+            st.write(conteudo)
 
-for msg in st.session_state.historico_chat:
-    if msg["role"] != "system":
-        with st.chat_message(msg["role"]):
-            st.markdown(msg["content"])
-
-# Finalização com envio do link de agendamento se nome e telefone já foram informados
-mensagens = " ".join([m["content"] for m in st.session_state.historico_chat])
-if "http" not in mensagens and "telefone" in mensagens.lower() and any(x in mensagens.lower() for x in ["reunião", "atendimento", "consulta"]):
-    with st.chat_message("assistant"):
-        st.markdown(f"📅 Para agendar sua reunião, acesse o link abaixo conforme sua disponibilidade:\n\n👉 [Agendar reunião]({LINK_GOOGLE_CALENDAR})")
+    mensagens = " ".join([m["content"] for m in st.session_state.historico_chat])
+    if "http" not in mensagens and "telefone" in mensagens.lower() and any(x in mensagens.lower() for x in ["reunião", "atendimento", "consulta"]):
+        with st.chat_message("assistant"):
+            st.markdown(f"📅 Para agendar sua reunião, acesse o link abaixo conforme sua disponibilidade:\n\n👉 [Agendar reunião]({LINK_GOOGLE_CALENDAR})")
+        enviar_conversa_telegram(st.session_state.historico_chat)
