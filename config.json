@@ -1,0 +1,9 @@
+{
+    "telegram_token": "",
+    "telegram_chat_id": "",
+    "email_sender": "rssmoris@gmail.com",
+    "email_password": "xahk eekv drbe nxyd ",
+    "email_receiver": "rodrigo@aionx.com.br",
+    "smtp_server": "smtp.gmail.com",
+    "smtp_port": 587
+}
