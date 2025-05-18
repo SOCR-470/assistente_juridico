@@ -14,9 +14,9 @@ client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Constantes e configurações
 ESCRITORIO = {
-    "nome_display": "Pinheiro Machado & Pinto",
+    "nome_display": "Pinheiro Machado e Pinto Advogados",
     "logo_url": "https://raw.githubusercontent.com/SOCR-470/assistente_juridico/main/logo_pmp.png",
-    "titulo_sub": "Pinheiro Machado & Pinto"
+    "titulo_sub": "Pinheiro Machado e Pinto Advogados"
 }
 
 LINK_GOOGLE_CALENDAR = os.getenv("LINK_CALENDAR") or "https://calendar.google.com/calendar/u/0/selfsched?sstoken=XXXXXXXXXX"
@@ -25,7 +25,7 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_CONTRATUAL")
 
 # Configuração da interface
 st.set_page_config(
-    page_title=ESCRITORIO["nome_display"],
+    page_title=ESCRITORIO[""],
     page_icon=ESCRITORIO["logo_url"]
 )
 
@@ -133,7 +133,7 @@ if entrada_usuario:
     # Gerar resposta
     with st.spinner("Luana está digitando..."):
         resposta = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4-turbo",
             messages=st.session_state.historico_chat,
             temperature=0.2
         )
